@@ -8,12 +8,23 @@ from api.utils import generate_sitemap
 
 api = Blueprint('api', __name__)
 
+todos = ["hello","world"]
+@api.route('/todos', methods=['GET'])
+def get_todos():
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
+        return jsonify(todos)
 
-    response_body = {
-        "hello": "world"
-    }
+@api.route('/todos', methods=['post'])
+def post_todos():
+    global todos
+    payload = request.json
+    todos.append(payload)
 
-    return jsonify(response_body), 200
+    return jsonify(payload)
+
+
+@api.route('/todos/int:position>', methods=['delete'])
+def delete_todos(position):
+    todos.pop(position)
+
+    return jsonify(todos), 200
